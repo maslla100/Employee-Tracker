@@ -1,3 +1,26 @@
+const figlet = require('figlet');
+
+figlet('Employee Manager', function (err, data) {
+    if (err) {
+        console.log('Something went wrong...');
+        console.dir(err);
+        return;
+    }
+    const lines = data.split('\n');
+    const maxLength = lines.reduce((max, line) => Math.max(max, line.length), 0); // Get the maximum line length
+    const border = '+' + '-'.repeat(maxLength + 2) + '+'; // Create top and bottom border based on max length
+
+    console.log(border);
+    lines.forEach(line => {
+        // Right pad each line with spaces to align the borders
+        console.log(`| ${line.padEnd(maxLength, ' ')} |`);
+    });
+    console.log(border);
+
+    runApp();
+});
+
+
 const mysql = require('mysql2');
 const connection = mysql.createConnection({
     host: 'localhost', // or your database host
@@ -71,7 +94,7 @@ function viewDepartments() {
     connection.query(query, (err, res) => {
         if (err) throw err;
         console.table(res); // Display result in a table format
-        runApp(); // Return to the main menu
+        runApp();
     });
 }
 
