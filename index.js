@@ -1,4 +1,6 @@
+const mysql = require('mysql2');
 const figlet = require('figlet');
+const inquirer = require('inquirer');
 
 figlet('Employee Manager', function (err, data) {
     if (err) {
@@ -16,12 +18,10 @@ figlet('Employee Manager', function (err, data) {
         console.log(`| ${line.padEnd(maxLength, ' ')} |`);
     });
     console.log(border);
-
-    runApp();
 });
 
 
-const mysql = require('mysql2');
+
 const connection = mysql.createConnection({
     host: 'localhost', // or your database host
     user: 'root', // your database username
@@ -35,7 +35,7 @@ connection.connect(err => {
     runApp(); // Function to start the application
 });
 
-const inquirer = require('inquirer');
+
 
 function runApp() {
     inquirer.prompt([
@@ -235,21 +235,45 @@ function updateEmployeeRole() {
     connection.query(employeeQuery, (err, employees) => {
         if (err) throw err;
 
+        if (!employees.length) {
+            console.log('No employees found.');
+            runApp();
+            return;
+        }
+
+        // Generate employee choices from the query results
+        const employeeChoices = employees.map(emp => ({
+            name: `${emp.first_name} ${emp.last_name}`,
+            value: emp.id
+        }));
+
         connection.query(roleQuery, (err, roles) => {
             if (err) throw err;
+
+            if (!roles.length) {
+                console.log('No roles found.');
+                runApp();
+                return;
+            }
+
+            // Generate role choices from the query results
+            const roleChoices = roles.map(role => ({
+                name: role.title,
+                value: role.id
+            }));
 
             inquirer.prompt([
                 {
                     type: 'list',
                     name: 'employeeId',
                     message: 'Which employee\'s role do you want to update?',
-                    choices: employees.map(emp => ({ name: emp.first_name + ' ' + emp.last_name, value: emp.id }))
+                    choices: employeeChoices
                 },
                 {
                     type: 'list',
                     name: 'roleId',
                     message: 'What is the new role of the employee?',
-                    choices: roles.map(role => ({ name: role.title, value: role.id }))
+                    choices: roleChoices
                 }
             ])
                 .then(answer => {
@@ -263,4 +287,5 @@ function updateEmployeeRole() {
         });
     });
 }
+
 
