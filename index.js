@@ -1,3 +1,4 @@
+require('dotenv').config();
 const mysql = require('mysql2');
 const figlet = require('figlet');
 const inquirer = require('inquirer');
@@ -23,11 +24,12 @@ figlet('Employee Manager', function (err, data) {
 
 
 const connection = mysql.createConnection({
-    host: 'localhost', // or your database host
-    user: 'root', // your database username
-    password: 'kmJD613947#1', // your database password
-    database: 'employee_tracker' // your database name
+    host: process.env.DB_HOST,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASS,
+    database: process.env.DB_NAME
 });
+
 
 connection.connect(err => {
     if (err) throw err;
