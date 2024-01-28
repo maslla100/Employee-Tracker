@@ -21,10 +21,7 @@ figlet('Employee Manager', function (err, data) {
     console.log(border);
 });
 
-console.log(process.env.DB_HOST);
-console.log(process.env.DB_USER);
-console.log(process.env.DB_PASS);
-console.log(process.env.DB_NAME);
+
 
 
 const connection = mysql.createConnection({
@@ -37,7 +34,6 @@ const connection = mysql.createConnection({
 
 connection.connect(err => {
     if (err) throw err;
-    console.log('Connected to the employee_tracker database.');
     runApp(); // Function to start the application
 });
 
