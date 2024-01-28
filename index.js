@@ -88,12 +88,15 @@ function runApp() {
         });
 }
 
-
 function viewDepartments() {
     const query = 'SELECT * FROM department';
     connection.query(query, (err, res) => {
         if (err) throw err;
-        console.table(res); // Display result in a table format
+        if (res.length === 0) {
+            console.log('No departments found.');
+        } else {
+            console.table(res);
+        }
         runApp();
     });
 }
@@ -105,7 +108,11 @@ function viewRoles() {
                    INNER JOIN department ON role.department_id = department.id`;
     connection.query(query, (err, res) => {
         if (err) throw err;
-        console.table(res);
+        if (res.length === 0) {
+            console.log('No roles found.');
+        } else {
+            console.table(res);
+        }
         runApp();
     });
 }
@@ -119,10 +126,15 @@ function viewEmployees() {
                    LEFT JOIN employee manager ON employee.manager_id = manager.id`;
     connection.query(query, (err, res) => {
         if (err) throw err;
-        console.table(res);
+        if (res.length === 0) {
+            console.log('No employees found.');
+        } else {
+            console.table(res);
+        }
         runApp();
     });
 }
+
 
 
 function addDepartment() {
