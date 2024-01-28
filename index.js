@@ -21,6 +21,10 @@ figlet('Employee Manager', function (err, data) {
     console.log(border);
 });
 
+console.log(process.env.DB_HOST);
+console.log(process.env.DB_USER);
+console.log(process.env.DB_PASS);
+console.log(process.env.DB_NAME);
 
 
 const connection = mysql.createConnection({
